@@ -1,7 +1,7 @@
 # Japanese Fiction Writing（cursor-japanese-fiction）
 
-**GitHub:** https://github.com/taisuke-sato-0925/cursor-japanese-fiction  
-**最新リリース:** https://github.com/taisuke-sato-0925/cursor-japanese-fiction/releases/latest
+**GitHub:** https://github.com/shoshi-sato-0925/cursor-japanese-fiction  
+**最新リリース:** https://github.com/shoshi-sato-0925/cursor-japanese-fiction/releases/latest
 
 Cursor / VS Code 向けの **小説執筆支援拡張機能** です。
 
