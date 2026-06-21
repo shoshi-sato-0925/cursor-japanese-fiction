@@ -1,0 +1,220 @@
+{
+  "name": "cursor-japanese-fiction",
+  "displayName": "Japanese Fiction Writing",
+  "description": "小説執筆向けツール — 原稿用紙換算、章・節ジャンプ、記号挿入",
+  "version": "0.2.1",
+  "publisher": "tsato",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguage:markdown",
+    "onLanguage:plaintext"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Japanese Fiction",
+      "properties": {
+        "japaneseFiction.targetPages": {
+          "type": "number",
+          "default": 400,
+          "minimum": 1,
+          "description": "目標原稿用紙枚数（400字詰め）"
+        },
+        "japaneseFiction.charsPerLine": {
+          "type": "number",
+          "default": 20,
+          "minimum": 1,
+          "description": "1行あたりの字数（400字詰め原稿用紙 = 20）"
+        },
+        "japaneseFiction.linesPerPage": {
+          "type": "number",
+          "default": 20,
+          "minimum": 1,
+          "description": "1枚あたりの行数（400字詰め原稿用紙 = 20）"
+        },
+        "japaneseFiction.novelRootSegment": {
+          "type": "string",
+          "default": "小説",
+          "description": "vault 内で作品フォルダの親となるディレクトリ名"
+        },
+        "japaneseFiction.draftFolderNames": {
+          "type": "array",
+          "default": ["初稿", "第2稿", "第3稿", "最終稿"],
+          "description": "原稿集計の単位となる稿フォルダ名"
+        },
+        "japaneseFiction.settingsFolderName": {
+          "type": "string",
+          "default": "設定",
+          "description": "集計対象外とする設定フォルダ名"
+        },
+        "japaneseFiction.manuscriptExcludeGlobs": {
+          "type": "array",
+          "default": ["**/README*.md"],
+          "description": "稿フォルダ内で集計から除外する glob"
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "japaneseFiction.outline",
+          "name": "小説ナビ",
+          "when": "japaneseFiction.isNovelManuscript"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "japaneseFiction.showManuscriptReport",
+        "title": "原稿用紙換算レポートを表示",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.refreshCount",
+        "title": "原稿換算を再計算",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.jumpToSection",
+        "title": "章・節へジャンプ（稿フォルダ全体）",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.jumpWithinFile",
+        "title": "章・節へジャンプ（このファイル内）",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.outlineRefresh",
+        "title": "小説ナビを更新",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.insertDialogue",
+        "title": "「」を挿入",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.insertInnerVoice",
+        "title": "『』を挿入",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.insertEmDash",
+        "title": "—— を挿入",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.insertEllipsis",
+        "title": "…… を挿入",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.insertNarrationLine",
+        "title": "地の文行（　）を挿入",
+        "category": "Japanese Fiction"
+      },
+      {
+        "command": "japaneseFiction.insertSceneBreak",
+        "title": "場面区切り（＊＊＊）を挿入",
+        "category": "Japanese Fiction"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "japaneseFiction.jumpToSection",
+        "key": "ctrl+shift+j",
+        "mac": "cmd+shift+j",
+        "when": "editorTextFocus && japaneseFiction.isNovelManuscript"
+      },
+      {
+        "command": "japaneseFiction.insertDialogue",
+        "key": "ctrl+alt+9",
+        "mac": "cmd+alt+9",
+        "when": "editorTextFocus && japaneseFiction.isNovelManuscript"
+      },
+      {
+        "command": "japaneseFiction.insertInnerVoice",
+        "key": "ctrl+alt+8",
+        "mac": "cmd+alt+8",
+        "when": "editorTextFocus && japaneseFiction.isNovelManuscript"
+      },
+      {
+        "command": "japaneseFiction.insertEmDash",
+        "key": "ctrl+alt+-",
+        "mac": "cmd+alt+-",
+        "when": "editorTextFocus && japaneseFiction.isNovelManuscript"
+      },
+      {
+        "command": "japaneseFiction.insertEllipsis",
+        "key": "ctrl+alt+.",
+        "mac": "cmd+alt+.",
+        "when": "editorTextFocus && japaneseFiction.isNovelManuscript"
+      },
+      {
+        "command": "japaneseFiction.insertNarrationLine",
+        "key": "ctrl+alt+enter",
+        "mac": "cmd+alt+enter",
+        "when": "editorTextFocus && japaneseFiction.isNovelManuscript"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "japaneseFiction.insertMenu",
+          "when": "editorTextFocus && japaneseFiction.isNovelManuscript",
+          "group": "japaneseFiction@1"
+        }
+      ],
+      "japaneseFiction.insertMenu": [
+        {
+          "command": "japaneseFiction.insertDialogue",
+          "group": "1_symbols@1"
+        },
+        {
+          "command": "japaneseFiction.insertInnerVoice",
+          "group": "1_symbols@2"
+        },
+        {
+          "command": "japaneseFiction.insertEmDash",
+          "group": "1_symbols@3"
+        },
+        {
+          "command": "japaneseFiction.insertEllipsis",
+          "group": "1_symbols@4"
+        },
+        {
+          "command": "japaneseFiction.insertNarrationLine",
+          "group": "2_format@1"
+        },
+        {
+          "command": "japaneseFiction.insertSceneBreak",
+          "group": "2_format@2"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "japaneseFiction.insertMenu",
+        "label": "小説記号を挿入"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node out/test/manuscriptCounter.test.js",
+    "package": "vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}
