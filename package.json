@@ -210,7 +210,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "npm run compile && node out/test/manuscriptCounter.test.js",
-    "package": "vsce package --allow-missing-repository"
+    "package": "npx @vscode/vsce package --allow-missing-repository"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
